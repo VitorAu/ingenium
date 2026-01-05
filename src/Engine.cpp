@@ -1,13 +1,10 @@
 #include "Engine.h"
 
-#include "Entity.h"
+#include "EntityManager.h"
 #include "raylib.h"
 #include <string>
 
-Entity player(1, "player");
-const char *playerName = player.EntityTag().c_str();
-const std::string idStr = std::to_string(player.EntityId());
-const char *playerId = idStr.c_str();
+EntityManager entityManager;
 
 Engine::Engine(const int screenWidth, const int screenHeight, const char *screenTitle)
     : m_screenWidth(screenWidth), m_screenHeight(screenHeight), m_screenTitle(screenTitle)
@@ -23,6 +20,10 @@ void Engine::Init()
     InitWindow(m_screenWidth, m_screenHeight, m_screenTitle);
     SetTargetFPS(60);
 
+    entityManager.EntityCreate("player");
+    entityManager.EntityCreate("enemy");
+    entityManager.EntityCreate("enemy2");
+
     m_running = true;
 }
 
@@ -30,12 +31,23 @@ void Engine::Update()
 {
     while (m_running)
     {
+        entityManager.EntityUpdate();
+
         BeginDrawing();
         ClearBackground(GREEN);
         DrawText("Ingenium", 50, 50, 50, BLACK);
 
-        DrawText(playerName, 50, 100, 50, BLACK);
-        DrawText(playerId, 50, 150, 50, BLACK);
+        int y = 120;
+        int lineSpacing = 40;
+
+        for (auto &e : entityManager.EntityGet())
+        {
+            DrawText(e->EntityTag().c_str(), 50, y, 20, BLACK);
+            DrawText(std::to_string(e->EntityId()).c_str(), 200, y, 20, BLACK);
+            DrawText(e->EntityActive() ? "true" : "false", 300, y, 20, BLACK);
+
+            y += lineSpacing;
+        }
 
         EndDrawing();
 
