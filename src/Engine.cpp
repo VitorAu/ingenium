@@ -1,10 +1,11 @@
 #include "Engine.h"
-
-#include "EntityManager.h"
+#include "Scene.h"
 #include "raylib.h"
+
+#include <iostream>
 #include <string>
 
-EntityManager entityManager;
+Scene scene;
 
 Engine::Engine(const int screenWidth, const int screenHeight, const char *screenTitle)
     : m_screenWidth(screenWidth), m_screenHeight(screenHeight), m_screenTitle(screenTitle)
@@ -20,9 +21,8 @@ void Engine::Init()
     InitWindow(m_screenWidth, m_screenHeight, m_screenTitle);
     SetTargetFPS(60);
 
-    entityManager.EntityCreate("player");
-    entityManager.EntityCreate("enemy");
-    entityManager.EntityCreate("enemy2");
+    scene.SceneAddEntity("player");
+    scene.SceneAddEntity("enemy");
 
     m_running = true;
 }
@@ -31,7 +31,7 @@ void Engine::Update()
 {
     while (m_running)
     {
-        entityManager.EntityUpdate();
+        scene.Update();
 
         BeginDrawing();
         ClearBackground(GREEN);
@@ -40,8 +40,10 @@ void Engine::Update()
         int y = 120;
         int lineSpacing = 40;
 
-        for (auto &e : entityManager.EntityGet())
+        for (auto &e : scene.SceneEntities())
         {
+            std::cout << e->EntityId() << " " << e->EntityTag() << std::endl;
+
             DrawText(e->EntityTag().c_str(), 50, y, 20, BLACK);
             DrawText(std::to_string(e->EntityId()).c_str(), 200, y, 20, BLACK);
             DrawText(e->EntityActive() ? "true" : "false", 300, y, 20, BLACK);

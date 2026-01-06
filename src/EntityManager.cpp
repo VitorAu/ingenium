@@ -10,7 +10,7 @@ EntityManager::~EntityManager()
 
 EntityPointer EntityManager::EntityCreate(const std::string &entityTag)
 {
-    auto e = std::make_shared<Entity>(m_entitiesTotal++, entityTag);
+    EntityPointer e(new Entity(m_entitiesTotal++, entityTag));
     m_entitiesToAdd.push_back(e);
 
     return e;
