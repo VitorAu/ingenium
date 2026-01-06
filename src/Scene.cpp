@@ -1,4 +1,6 @@
 #include "Scene.h"
+#include "Systems.h"
+#include "raylib.h"
 
 Scene::Scene()
 {
@@ -24,25 +26,25 @@ const EntityVector &Scene::SceneEntities(const std::string &tag)
     return m_sceneEntities.EntityGet(tag);
 }
 
-CRender &Scene::SceneRender(const Entity &e)
+CRender *Scene::SceneRender(const Entity &e)
 {
     std::size_t eId = e.EntityId();
     auto it = m_sceneRenders.find(eId);
-    return it->second;
+    return &it->second;
 }
 
-CTransform &Scene::SceneTransform(const Entity &e)
+CTransform *Scene::SceneTransform(const Entity &e)
 {
     std::size_t eId = e.EntityId();
     auto it = m_sceneTransforms.find(eId);
-    return it->second;
+    return &it->second;
 }
 
-CInput &Scene::SceneInput(const Entity &e)
+CInput *Scene::SceneInput(const Entity &e)
 {
     std::size_t eId = e.EntityId();
     auto it = m_sceneInputs.find(eId);
-    return it->second;
+    return &it->second;
 }
 
 void Scene::SceneAddRender(const CRender &c, const Entity &e)
@@ -66,4 +68,8 @@ void Scene::SceneAddInput(const CInput &c, const Entity &e)
 void Scene::Update()
 {
     m_sceneEntities.EntityUpdate();
+
+    Systems::SInput(*this);
+    Systems::STransform(*this, GetFrameTime());
+    Systems::SRender(*this);
 }

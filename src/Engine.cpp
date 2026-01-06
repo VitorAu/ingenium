@@ -1,9 +1,7 @@
 #include "Engine.h"
+#include "Components.h"
 #include "Scene.h"
 #include "raylib.h"
-
-#include <iostream>
-#include <string>
 
 Scene scene;
 
@@ -21,8 +19,23 @@ void Engine::Init()
     InitWindow(m_screenWidth, m_screenHeight, m_screenTitle);
     SetTargetFPS(60);
 
-    scene.SceneAddEntity("player");
-    scene.SceneAddEntity("enemy");
+    auto player = scene.SceneAddEntity("player");
+    CTransform transform;
+    transform.m_x = 200.0f;
+    transform.m_y = 200.0f;
+
+    CRender render;
+    render.m_tex = LoadTexture("assets/sprites/char.png");
+    render.m_srcRec = {0, 0, 48, 48};
+    render.m_destRec = {200, 200, 100, 100};
+    render.m_vecOrigin = {render.m_destRec.width, render.m_destRec.height};
+    render.m_rotation = 0.0f;
+
+    CInput input;
+
+    scene.SceneAddTransform(transform, *player);
+    scene.SceneAddRender(render, *player);
+    scene.SceneAddInput(input, *player);
 
     m_running = true;
 }
@@ -31,25 +44,10 @@ void Engine::Update()
 {
     while (m_running)
     {
-        scene.Update();
-
         BeginDrawing();
-        ClearBackground(GREEN);
-        DrawText("Ingenium", 50, 50, 50, BLACK);
+        ClearBackground(RAYWHITE);
 
-        int y = 120;
-        int lineSpacing = 40;
-
-        for (auto &e : scene.SceneEntities())
-        {
-            std::cout << e->EntityId() << " " << e->EntityTag() << std::endl;
-
-            DrawText(e->EntityTag().c_str(), 50, y, 20, BLACK);
-            DrawText(std::to_string(e->EntityId()).c_str(), 200, y, 20, BLACK);
-            DrawText(e->EntityActive() ? "true" : "false", 300, y, 20, BLACK);
-
-            y += lineSpacing;
-        }
+        scene.Update();
 
         EndDrawing();
 

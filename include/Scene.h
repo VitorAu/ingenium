@@ -24,9 +24,9 @@ class Scene
     EntityPointer SceneAddEntity(const std::string &tag);
     const EntityVector &SceneEntities();
     const EntityVector &SceneEntities(const std::string &tag);
-    CRender &SceneRender(const Entity &e);
-    CTransform &SceneTransform(const Entity &e);
-    CInput &SceneInput(const Entity &e);
+    CRender *SceneRender(const Entity &e);
+    CTransform *SceneTransform(const Entity &e);
+    CInput *SceneInput(const Entity &e);
 
     void SceneAddRender(const CRender &c, const Entity &e);
     void SceneAddTransform(const CTransform &c, const Entity &e);
