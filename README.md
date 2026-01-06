@@ -1,6 +1,6 @@
 # Ingenium
 
-**Ingenium** é uma engine 2D leve e educacional, construída em **C++** usando **CMake** e **raylib**. O projeto é voltado para **propósitos de aprendizado**, permitindo aos desenvolvedores experimentar conceitos centrais de desenvolvimento de engines, incluindo um **sistema de gerenciamento de entidades com ECSM (Entity-Component-System Manager)**.
+**Ingenium** é uma engine 2D leve, construída em **C++** usando **CMake** e **raylib**. O projeto é voltado para **propósitos de aprendizado**.
 
 ---
 
@@ -16,15 +16,26 @@
 
 ```
 ingenium/
-├── CMakeLists.txt
+├── include/
+│   ├── Components.h
+│   ├── Engine.h
+│   ├── Entity.h
+│   ├── EntityManager.h
+│   ├── Scene.h
+│   ├── Systems.h
 ├── src/
 │   ├── CMakeLists.txt
 │   ├── main.cpp
 │   ├── Engine.cpp
-│   ├── Engine.h
-├── include/
+│   ├── Entity.cpp
+│   ├── EntityManager.cpp
+│   ├── Scene.cpp
+│   ├── Systems.cpp
 ├── vendor/
-├── init.sh  
+│   ├── raylib/
+│   ├── CMakeLists.txt
+├── CMakeLists.txt
+├── init.sh
 └── README.md
 ```
 
@@ -56,7 +67,7 @@ cmake ..
 cmake --build .
 ```
 
-3. Execute o jogo/engine:
+3. Execute o engine:
 
 ```bash
 ./src/ingenium
