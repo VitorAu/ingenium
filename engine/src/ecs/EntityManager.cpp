@@ -1,4 +1,4 @@
-#include "EntityManager.h"
+#include "ecs/EntityManager.h"
 
 EntityManager::EntityManager()
 {
@@ -8,7 +8,7 @@ EntityManager::~EntityManager()
 {
 }
 
-EntityPointer EntityManager::EntityCreate(const std::string &entityTag)
+EntityPointer EntityManager::CreateEntity(const std::string &entityTag)
 {
     EntityPointer e(new Entity(m_entitiesTotal++, entityTag));
     m_entitiesToAdd.push_back(e);
@@ -16,33 +16,33 @@ EntityPointer EntityManager::EntityCreate(const std::string &entityTag)
     return e;
 }
 
-const EntityVector &EntityManager::EntityGet()
+const EntityVector &EntityManager::Entities()
 {
     return m_entitiesVec;
 }
 
-const EntityVector &EntityManager::EntityGet(const std::string &entityTag)
+const EntityVector &EntityManager::Entities(const std::string &entityTag)
 {
     return m_entitiesMap[entityTag];
 }
 
-void EntityManager::EntityUpdate()
+void EntityManager::Update()
 {
     for (auto &e : m_entitiesToAdd)
     {
-        if (e->EntityActive() == true)
+        if (e->IsActive() == true)
         {
             m_entitiesVec.push_back(e);
-            m_entitiesMap[e->EntityTag()].push_back(e);
+            m_entitiesMap[e->Tag()].push_back(e);
         }
     }
 
-    EntityDelete();
+    Delete();
 }
 
-void EntityManager::EntityDelete()
+void EntityManager::Delete()
 {
-    auto inactive = [](const EntityPointer &e) { return !e->EntityActive(); };
+    auto inactive = [](const EntityPointer &e) { return !e->IsActive(); };
 
     m_entitiesToAdd.clear();
     std::erase_if(m_entitiesVec, inactive);

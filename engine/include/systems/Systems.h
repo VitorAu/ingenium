@@ -1,7 +1,7 @@
 #ifndef SYSTEMS_H
 #define SYSTEMS_H
 
-#include "Scene.h"
+#include "ecs/Scene.h"
 
 class Systems
 {

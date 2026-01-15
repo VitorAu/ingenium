@@ -2,7 +2,7 @@
 
 const int screenWidth = 800;
 const int screenHeight = 640;
-const char *screenTitle = "ingenium";
+const char *screenTitle = "Trial and error";
 
 int main()
 {
